@@ -1,0 +1,10 @@
+streamlit
+flask
+yfinance
+matplotlib
+pandas
+joblib
+scikit-learn
+xgboost
+vaderSentiment
+requests
