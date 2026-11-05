@@ -2,16 +2,26 @@
 
 A Streamlit dashboard that forecasts whether a stock will close higher or lower in the next trading session. It also shows how often that forecast has been right on days the model never saw.
 
+**Live app:** https://stocktrend-predict.streamlit.app
+
 It works with any Yahoo Finance symbol: US stocks (`AAPL`, `MSFT`), NSE and BSE stocks (`RELIANCE.NS`, `TCS.BO`), indices (`^NSEI`, `^GSPC`) and ETFs.
 
-## What the dashboard shows
+## Pages
 
-- **Quote summary:** last price and daily change, previous close, day range, 52-week range with position, 20-day annualised volatility, RSI (14) and average volume. If the market is still open, the latest price is marked as live.
-- **Price chart:** 1M to 10Y range with optional 5-day SMA, 10-day SMA and 20-day EMA overlays, a volume panel and a hover readout of OHLC values.
-- **Next-session call:** Up or Down, the probability of a higher close, how far that probability is from 50%, and the model's track record on this stock.
-- **Model track record:** walk-forward accuracy with a 95% confidence interval, comparison with a naive baseline, ROC AUC, hit rate on high-conviction calls, a calls-vs-outcomes table, accuracy per test block, a growth-of-100 backtest against buy and hold, and feature importance.
-- **Indicators:** RSI chart and today's value of every model input, with its usual range and percentile in the stock's own history.
-- **Price data:** daily table with indicators, plus CSV downloads of the full history and of every test prediction.
+- **Overview:** the quote with a 3-month sparkline, previous close, day change, 52-week range, volatility, RSI and volume. Below it:
+  - a price chart (1M to 10Y) with SMA/EMA overlays and volume coloured by up or down day
+  - the next-session forecast and the model's track record on the stock
+  - tabs for model testing, indicators and the full price table, with CSV downloads
+- **Compare:** up to six symbols side by side, with quick lists (US tech, India IT, India banks, indices):
+  - tiles coloured by today's move
+  - a growth-of-100 chart
+  - a scorecard of return, volatility, drawdown, RSI and 52-week position
+  - a correlation grid
+- **Strategy lab:** turn the model's calls into a trading rule. Set the starting amount, the probability needed to buy, the cost per trade, and whether to go short on Down calls. You see the final value, a comparison with buy and hold, the trade count, winning days, drawdown, an equity curve with holding periods shaded, and a trade log.
+- **Guess the move:** a game. See a real chart up to a random day from the test year, guess Higher or Lower, and compare your score and streak with the model's.
+- **Learn:** RSI, moving averages, MACD, Bollinger bands and walk-forward testing, explained on a live chart of the chosen symbol, plus a four-question quiz.
+
+The symbol you pick is shared across pages, and every number comes from the same cached data.
 
 ## How the model works
 
@@ -81,7 +91,9 @@ The response contains the forecast, `prob_up`, the latest close and the walk-for
 
 | File | Purpose |
 |---|---|
-| `dashboard.py` | Streamlit app |
+| `dashboard.py` | Streamlit entry point and page navigation |
+| `views/` | One file per page: overview, compare, strategy, game, learn |
+| `ui.py` | Shared styling, data loading, charts and page blocks |
 | `features.py` | Yahoo Finance loading, data cleaning, indicators and model features |
 | `train_model.py` | Model, walk-forward test, metrics, command-line report |
 | `app.py` | Flask API |
